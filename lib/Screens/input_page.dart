@@ -1,11 +1,12 @@
-import 'package:bmi_calculator/results_page.dart';
+import 'package:bmi_calculator/Screens/results_page.dart';
 import 'package:flutter/material.dart';
-import 'icon_content.dart';
-import 'reusable_card.dart';
+import '../Components/icon_content.dart';
+import '../Components/reusable_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'constants.dart';
-import 'bottom_button.dart';
-import 'rounded_button.dart';
+import '../constants.dart';
+import '../Components/bottom_button.dart';
+import '../Components/rounded_button.dart';
+import '../Components/calculator_brain.dart';
 
 enum Gender { male, female }
 
@@ -19,9 +20,9 @@ class _InputPageState extends State<InputPage> {
   Color femaleCardColor = kInactiveCardColor;
 
   Gender selectedGender;
-  int height = 180;
+  int height = 72;
   int weight = 180;
-  int age = 34;
+  int age = 30;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,7 @@ class _InputPageState extends State<InputPage> {
                         style: kNumTextStyle,
                       ),
                       Text(
-                        'cm',
+                        'in',
                         style: kLabelTextStyle,
                       ),
                     ],
@@ -109,8 +110,8 @@ class _InputPageState extends State<InputPage> {
                     ),
                     child: Slider(
                       value: height.toDouble(),
-                      max: 250,
-                      min: 100,
+                      max: 105,
+                      min: 40,
                       onChanged: (double newValue) {
                         setState(() {
                           height = newValue.toInt();
@@ -213,10 +214,17 @@ class _InputPageState extends State<InputPage> {
           ),
           BottomButton(
             onTap: () {
+              CalculatorBrain calc =
+                  CalculatorBrain(height: height, weight: weight);
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ResultsPage(),
+                  builder: (context) => ResultsPage(
+                    bmiResult: calc.calcBMI(),
+                    resultText: calc.getResult(),
+                    interpretation: calc.getInterpretation(),
+                  ),
                 ),
               );
             },
@@ -227,5 +235,3 @@ class _InputPageState extends State<InputPage> {
     );
   }
 }
-
-void buttonAction() {}
